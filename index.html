@@ -1,1101 +1,206 @@
-
 <!DOCTYPE html>
-<html lang="es"><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FocusCube - El Temporizador Pomodoro que Transformará tu Productividad</title>
-    <meta name="description" content="Maximiza tu productividad con el temporizador Pomodoro FocusCube, diseñado para estudiar, trabajar y cocinar. Envío gratis en todo Chile.">
-    <link href="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/all.min.css">
-    <link href="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/css2.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: #333;
-            scroll-behavior: smooth;
-        }
-        .gradient-bg {
-            background: linear-gradient(135deg, #3498db, #2c3e50);
-        }
-        .text-gradient {
-            background: linear-gradient(90deg, #3498db, #2ecc71);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .countdown-animation {
-            animation: countdown 25s linear infinite;
-        }
-        @keyframes countdown {
-            0% { width: 100%; }
-            100% { width: 0%; }
-        }
-        .hover-scale {
-            transition: transform 0.3s ease;
-        }
-        .hover-scale:hover {
-            transform: scale(1.03);
-        }
-        .shadow-custom {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .timer-box {
-            border-radius: 15px;
-            position: relative;
-            overflow: hidden;
-        }
-        .timer-progress {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #3498db, #2ecc71);
-        }
-        .pack-badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background-color: #e74c3c;
-            color: white;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            transform: rotate(15deg);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .rotating-cube {
-            animation: rotate 8s infinite linear;
-            transform-style: preserve-3d;
-        }
-        @keyframes rotate {
-            0% { transform: rotateY(0deg) rotateX(0deg); }
-            100% { transform: rotateY(360deg) rotateX(360deg); }
-        }
-        .sticky-nav {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            backdrop-filter: blur(10px);
-            background-color: rgba(255, 255, 255, 0.8);
-        }
-    </style>
-<style>
-    .genspark-badge-button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #333;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 12px;
-      font-size: 12px;
-      cursor: pointer;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FocusCube - Temporizador Pomodoro Inteligente</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --secondary: #60a5fa;
+      --accent: #93c5fd;
+      --bg: #eff6ff;
+      --glass-bg: rgba(255, 255, 255, 0.8);
+      --text: #1e293b;
+      --shadow-light: 0 10px 20px rgba(0, 0, 0, 0.05);
+      --radius: 1.5rem;
     }
-    
-    .genspark-modal {
-      display: none;
-      position: fixed;
-      bottom: 80px;
-      right: 20px;
-      z-index: 10000;
-      justify-content: end;
-    }
-    
-    .genspark-modal-content {
-      background-color: white;
-      border-radius: 8px;
-      max-width: 450px;
-      width: 100%;
-      box-sizing: border-box;
-      padding: 20px;
-      position: relative;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      font-size: 14px;
-    }
-    @media (max-width: 768px) {
-      .genspark-modal-content {
-        max-width: 90%;
-      }
-    }
-    
-    .genspark-close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 20px;
-      cursor: pointer;
-      background: none;
-      border: none;
-    }
-    
-    .genspark-title {
-      margin-bottom: 8px;
-      font-weight: normal;
-      display: inline;
-      font-size: 14px;
-    }
-    
-    .genspark-report {
-      color: #909499;
-      text-decoration: underline;
-      cursor: pointer;
-      margin-bottom: 14px;
-      display: inline;
-    }
-    
-    .genspark-info {
-      margin: 25px 0;
-      color: #333;
-      font-size: 14px;
-    }
-    
-    .genspark-buttons {
-      display: flex;
-      gap: 10px;
-    }
-    
-    .genspark-remove-btn {
-      background-color: #f5f5f5;
-      border: 1px solid #ddd;
-      color: #333;
-      padding: 4px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      flex: 1;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
-    
-    .genspark-go-btn {
-      background-color: #222;
-      border: none;
-      color: white;
-      padding: 4px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      flex: 1;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
-  </style></head>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    a { text-decoration: none; }
+    img { max-width: 100%; display: block; border-radius: var(--radius); }
+    nav { background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); box-shadow: var(--shadow-light); position: fixed; width: 100%; z-index: 100; border-bottom-left-radius: var(--radius); border-bottom-right-radius: var(--radius); }
+    .nav-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; }
+    .nav-links a { margin-left: 1.5rem; font-weight: 600; color: var(--text); padding: 0.5rem 1rem; border-radius: var(--radius); transition: background 0.3s; }
+    .nav-links a:hover { background: var(--accent); color: #fff; }
+    .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 6rem 0 2rem; }
+    .glass-card { background: var(--glass-bg); backdrop-filter: blur(10px); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow-light); transition: transform 0.3s ease; }
+    .glass-card:hover { transform: translateY(-5px); }
+    .btn { display: inline-block; background: var(--primary); color: #fff; padding: 0.75rem 2rem; border-radius: 9999px; font-weight: 600; transition: background 0.3s, transform 0.3s; }
+    .btn:hover { background: var(--secondary); transform: translateY(-2px); }
+    section { padding: 4rem 0; }
+    #hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, var(--accent), var(--primary)); color: #fff; }
+    #hero .content { flex: 1; max-width: 600px; padding: 2rem; opacity: 0; transform: translateY(30px); animation: fadeInUp 1s forwards 0.5s; }
+    #hero .content h1 { font-size: 3rem; margin-bottom: 1rem; }
+    #hero .content p { margin-bottom: 1.5rem; opacity: 0.9; }
+    #hero .stats { display: flex; gap: 2rem; margin-bottom: 2rem; }
+    #hero .stat-item { text-align: center; background: rgba(255,255,255,0.2); padding: 1rem 2rem; border-radius: var(--radius); }
+    #hero .image { flex: 1; text-align: center; opacity: 0; transform: translateY(30px); animation: fadeInUp 1s forwards 1s; }
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+    .grid { display: grid; gap: 2rem; }
+    .features-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+    .benefits-grid { grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); margin-top: 2rem; }
+    .stats { display: flex; justify-content: space-around; margin: 2rem 0; }
+    .stat-item { text-align: center; }
+    .pricing { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 2rem; }
+    .plan-card { background: #fff; border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow-light); text-align: center; transition: transform 0.3s; }
+    .plan-card:hover { transform: translateY(-5px); }
+    .plan-card h3 { margin-bottom: 1rem; font-weight: 600; }
+    .plan-card ul { list-style: none; margin: 1rem 0; padding: 0; }
+    .plan-card li { margin-bottom: 0.5rem; }
+    .plan-card .price { font-size: 2rem; font-weight: 800; margin: 1rem 0; color: var(--primary); }
+    .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 2rem; }
+    .testimonial { background: #fff; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow-light); }
+    .testimonial p { margin-bottom: 1rem; }
+    .community { text-align: center; }
+    .community-stats { display: flex; justify-content: space-around; margin: 2rem 0; }
+    .faq-item { background: #fff; padding: 1.5rem; border-radius: var(--radius); margin-bottom: 1rem; box-shadow: var(--shadow-light); }
+    form { background: #fff; padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow-light); max-width: 600px; margin: 0 auto; }
+    form .form-group { margin-bottom: 1rem; }
+    form label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+    form input, form textarea, form select { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: var(--radius); }
+    footer { background: #fff; padding: 2rem 0; text-align: center; font-size: 0.9rem; color: #64748b; }
+    footer .footer-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    footer .footer-links div { text-align: left; }
+  </style>
+</head>
 <body>
-    <!-- Navegación -->
-    <nav class="sticky-nav py-4 border-b border-gray-200">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <div class="flex items-center">
-                <span class="text-2xl font-bold text-gradient">FocusCube</span>
-            </div>
-            <div class="hidden md:flex space-x-6">
-                <a href="#caracteristicas" class="text-gray-600 hover:text-blue-600 transition duration-300">Características</a>
-                <a href="#beneficios" class="text-gray-600 hover:text-blue-600 transition duration-300">Beneficios</a>
-                <a href="#packs" class="text-gray-600 hover:text-blue-600 transition duration-300">Comprar</a>
-                <a href="#testimonios" class="text-gray-600 hover:text-blue-600 transition duration-300">Testimonios</a>
-                <a href="#faq" class="text-gray-600 hover:text-blue-600 transition duration-300">FAQ</a>
-            </div>
-            <a href="#packs" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition duration-300">
-                Comprar Ahora
-            </a>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="py-20 md:py-32 bg-gray-50 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10">
-            <div class="absolute transform rotate-12 bg-blue-400 w-64 h-64 rounded-full -top-10 -left-10"></div>
-            <div class="absolute transform -rotate-12 bg-green-400 w-96 h-96 rounded-full -bottom-20 -right-20"></div>
-        </div>
-        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center relative z-10">
-            <div class="md:w-1/2 mb-10 md:mb-0">
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                    Domina tu tiempo con el <span class="text-gradient">Temporizador Pomodoro</span> más inteligente
-                </h1>
-                <p class="text-lg text-gray-600 mb-8">
-                    FocusCube combina tecnología avanzada de sensor de 
-gravedad y diseño minimalista para convertirte en la persona más 
-productiva que conoces.
-                </p>
-                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="#packs" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-lg transition duration-300 text-center">
-                        Comprar Ahora
-                    </a>
-                    <a href="#beneficios" class="border border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold px-8 py-4 rounded-lg transition duration-300 text-center">
-                        Descubrir Beneficios
-                    </a>
-                </div>
-                <div class="mt-8 flex items-center">
-                    <div class="flex">
-                        <div class="text-yellow-400">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <span class="ml-2 text-gray-600">4.9/5 (132 reseñas)</span>
-                    <span class="ml-4 text-sm font-medium px-3 py-1 rounded-full bg-green-100 text-green-700">
-                        <i class="fas fa-truck mr-1"></i> Envío Gratis
-                    </span>
-                </div>
-            </div>
-            <div class="md:w-1/2 flex justify-center">
-                <div class="relative">
-                    <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/photo-1588931294038-b6b1bef7a3a7.htm" alt="Temporizador Pomodoro FocusCube" class="w-full max-w-md rounded-2xl shadow-custom hover-scale">
-                    <div class="absolute -bottom-4 -right-4 bg-white shadow-lg rounded-lg py-2 px-4 flex items-center">
-                        <div class="timer-box w-12 h-12 bg-gray-100 flex items-center justify-center text-lg font-bold mr-3">
-                            25
-                            <div class="timer-progress w-full countdown-animation"></div>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Método Pomodoro</p>
-                            <p class="font-semibold">Máxima Eficiencia</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Características -->
-    <section id="caracteristicas" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Características Revolucionarias</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Diseñado para maximizar tu productividad con 
-funciones innovadoras que hacen que gestionar tu tiempo sea sencillo y 
-efectivo.
-                </p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-gray-50 p-8 rounded-xl shadow-custom hover-scale">
-                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
-                        <i class="fas fa-mobile-alt text-2xl text-blue-600"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3">Sensor de Gravedad</h3>
-                    <p class="text-gray-600">
-                        Simplemente gira el cubo para iniciar diferentes
- intervalos de tiempo (5, 10, 30 o 60 minutos) sin necesidad de 
-presionar botones.
-                    </p>
-                </div>
-                
-                <div class="bg-gray-50 p-8 rounded-xl shadow-custom hover-scale">
-                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
-                        <i class="fas fa-battery-full text-2xl text-green-600"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3">Batería Recargable</h3>
-                    <p class="text-gray-600">
-                        Dura hasta 8 meses con una sola carga. Olvídate de cambiar pilas constantemente. Ecológico y económico.
-                    </p>
-                </div>
-                
-                <div class="bg-gray-50 p-8 rounded-xl shadow-custom hover-scale">
-                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6">
-                        <i class="fas fa-volume-mute text-2xl text-purple-600"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3">Alarma Silenciosa</h3>
-                    <p class="text-gray-600">
-                        Elige entre alarma por vibración o sonido 
-ajustable. Perfecto para bibliotecas, oficinas compartidas o cualquier 
-espacio silencioso.
-                    </p>
-                </div>
-                
-                <div class="bg-gray-50 p-8 rounded-xl shadow-custom hover-scale">
-                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mb-6">
-                        <i class="fas fa-paint-brush text-2xl text-yellow-600"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3">Diseño Minimalista</h3>
-                    <p class="text-gray-600">
-                        Elegante y compacto. Se adapta perfectamente a 
-cualquier espacio de trabajo moderno mejorando la estética de tu 
-escritorio.
-                    </p>
-                </div>
-                
-                <div class="bg-gray-50 p-8 rounded-xl shadow-custom hover-scale">
-                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-6">
-                        <i class="fas fa-cog text-2xl text-red-600"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3">Personalizable</h3>
-                    <p class="text-gray-600">
-                        Configura tiempos personalizados además de los 
-preestablecidos para adaptarlo a tu método de trabajo particular.
-                    </p>
-                </div>
-                
-                <div class="bg-gray-50 p-8 rounded-xl shadow-custom hover-scale">
-                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
-                        <i class="fas fa-tachometer-alt text-2xl text-indigo-600"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3">Pantalla LED Clara</h3>
-                    <p class="text-gray-600">
-                        Visualiza fácilmente el tiempo restante con su 
-pantalla LED de alta visibilidad, legible incluso a distancia.
-                    </p>
-                </div>
-            </div>
-            
-            <div class="mt-16 text-center">
-                <a href="#packs" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-lg transition duration-300">
-                    Quiero Mejorar Mi Productividad
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Beneficios -->
-    <section id="beneficios" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Transforma Tu Productividad</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Con FocusCube no solo estás comprando un 
-temporizador, estás invirtiendo en un cambio de hábitos que transformará
- tu manera de trabajar.
-                </p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div class="flex flex-col md:flex-row items-start">
-                    <div class="bg-blue-100 rounded-full p-4 mr-4 mb-4 md:mb-0">
-                        <i class="fas fa-brain text-2xl text-blue-600"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-semibold mb-2">Mayor Concentración</h3>
-                        <p class="text-gray-600">
-                            Reduce distracciones y entra en estado de 
-flujo rápidamente. Estudios demuestran que trabajar en intervalos cortos
- aumenta la concentración en un 52%.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="flex flex-col md:flex-row items-start">
-                    <div class="bg-green-100 rounded-full p-4 mr-4 mb-4 md:mb-0">
-                        <i class="fas fa-chart-line text-2xl text-green-600"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-semibold mb-2">Productividad Mejorada</h3>
-                        <p class="text-gray-600">
-                            Completa más tareas en menos tiempo. 
-Nuestros usuarios reportan un aumento del 37% en su productividad diaria
- usando el método Pomodoro.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="flex flex-col md:flex-row items-start">
-                    <div class="bg-purple-100 rounded-full p-4 mr-4 mb-4 md:mb-0">
-                        <i class="fas fa-heart text-2xl text-purple-600"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-semibold mb-2">Reducción del Estrés</h3>
-                        <p class="text-gray-600">
-                            Trabajar con descansos planificados reduce 
-el agotamiento mental y el estrés en un 31%, según estudios de 
-productividad laboral.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="flex flex-col md:flex-row items-start">
-                    <div class="bg-red-100 rounded-full p-4 mr-4 mb-4 md:mb-0">
-                        <i class="fas fa-clock text-2xl text-red-600"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-semibold mb-2">Gestión del Tiempo</h3>
-                        <p class="text-gray-600">
-                            Mejora tus estimaciones de tiempo y aprende a
- distribuir mejor tus tareas diarias, optimizando tu rendimiento en cada
- actividad.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="flex flex-col md:flex-row items-start">
-                    <div class="bg-yellow-100 rounded-full p-4 mr-4 mb-4 md:mb-0">
-                        <i class="fas fa-bed text-2xl text-yellow-600"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-semibold mb-2">Mejor Descanso</h3>
-                        <p class="text-gray-600">
-                            Los descansos programados ayudan a prevenir 
-el síndrome de burnout y mejoran la calidad de tu trabajo a largo plazo.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="flex flex-col md:flex-row items-start">
-                    <div class="bg-indigo-100 rounded-full p-4 mr-4 mb-4 md:mb-0">
-                        <i class="fas fa-tasks text-2xl text-indigo-600"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-semibold mb-2">Hábitos Sostenibles</h3>
-                        <p class="text-gray-600">
-                            Desarrolla una rutina de trabajo consistente
- que puedes mantener a largo plazo, aumentando tu efectividad día tras 
-día.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mt-16 p-8 bg-white rounded-xl shadow-custom">
-                <div class="flex flex-col md:flex-row items-center">
-                    <div class="md:w-1/3 mb-6 md:mb-0 md:mr-8">
-                        <div class="aspect-w-1 aspect-h-1">
-                            <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/photo-1507238691740-187a5b1d37b8.avif" alt="Persona trabajando con temporizador" class="rounded-lg">
-                        </div>
-                    </div>
-                    <div class="md:w-2/3">
-                        <h3 class="text-2xl font-semibold mb-4">¿Sabías que el método Pomodoro aumenta tu enfoque en un 70%?</h3>
-                        <p class="text-gray-600 mb-6">
-                            Una investigación de la Universidad de 
-California demostró que las personas que utilizan el método Pomodoro 
-experimentan un 70% menos de distracciones y un 25% más de satisfacción 
-con el trabajo realizado.
-                        </p>
-                        <div class="flex items-center">
-                            <div class="w-full bg-gray-200 h-3 rounded-full">
-                                <div class="bg-blue-600 h-3 rounded-full" style="width: 70%"></div>
-                            </div>
-                            <span class="ml-4 font-bold text-blue-600">+70%</span>
-                        </div>
-                        <p class="mt-2 text-sm text-gray-500">Aumento del enfoque comparado con trabajo sin intervalos planificados</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Opciones de compra -->
-    <section id="packs" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Elige Tu Plan de Productividad</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Ya sea que busques mejorar tu productividad personal
- o equipar a todo tu equipo, tenemos la opción perfecta para ti.
-                </p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Producto Individual -->
-                <div class="bg-white border border-gray-200 rounded-2xl shadow-custom overflow-hidden hover-scale">
-                    <div class="bg-blue-50 px-6 py-4">
-                        <h3 class="text-xl font-semibold text-blue-800">Personal</h3>
-                        <p class="text-gray-600">Para uso individual</p>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-center mb-6">
-                            <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/photo-1594390074199-7b041e9126a7.htm" alt="FocusCube Individual" class="w-48 h-48 object-cover rounded-lg">
-                        </div>
-                        <div class="mb-6">
-                            <div class="flex items-center justify-center">
-                                <span class="text-gray-400 line-through mr-2">$29.990</span>
-                                <span class="text-3xl font-bold">$24.990</span>
-                            </div>
-                            <p class="text-sm text-center text-gray-500">CLP · Incluye envío gratis</p>
-                        </div>
-                        <ul class="mb-6 space-y-2">
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>1 Temporizador FocusCube</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>Cable USB de carga</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>Guía digital de Productividad PDF</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>Garantía de 1 año</span>
-                            </li>
-                        </ul>
-                        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-300">
-                            Comprar Ahora
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Pack Duo -->
-                <div class="bg-white border-2 border-blue-500 rounded-2xl shadow-xl overflow-hidden hover-scale relative transform scale-105 z-10">
-                    <div class="pack-badge">
-                        -20%
-                    </div>
-                    <div class="bg-blue-600 px-6 py-4 text-white">
-                        <h3 class="text-xl font-semibold">Duo Pack</h3>
-                        <p>Nuestra opción más popular</p>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-center mb-6">
-                            <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/photo-1611224885990-ab7363d1f2a9.avif" alt="FocusCube Duo Pack" class="w-48 h-48 object-cover rounded-lg">
-                        </div>
-                        <div class="mb-6">
-                            <div class="flex items-center justify-center">
-                                <span class="text-gray-400 line-through mr-2">$59.980</span>
-                                <span class="text-3xl font-bold">$39.990</span>
-                            </div>
-                            <p class="text-sm text-center text-gray-500">CLP · Incluye envío gratis</p>
-                        </div>
-                        <ul class="mb-6 space-y-2">
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span><strong>2 Temporizadores FocusCube</strong></span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>2 Cables USB de carga</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>Guía digital de Productividad PDF</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>Planificador semanal impreso</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>Garantía extendida de 2 años</span>
-                            </li>
-                        </ul>
-                        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-300">
-                            Comprar Ahora
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Pack Oficina -->
-                <div class="bg-white border border-gray-200 rounded-2xl shadow-custom overflow-hidden hover-scale">
-                    <div class="bg-blue-50 px-6 py-4">
-                        <h3 class="text-xl font-semibold text-blue-800">Pack Oficina</h3>
-                        <p class="text-gray-600">Para equipos de trabajo</p>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-center mb-6">
-                            <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/photo-1524749292158-7540c2494485.avif" alt="FocusCube Pack Oficina" class="w-48 h-48 object-cover rounded-lg">
-                        </div>
-                        <div class="mb-6">
-                            <div class="flex items-center justify-center">
-                                <span class="text-gray-400 line-through mr-2">$149.950</span>
-                                <span class="text-3xl font-bold">$89.990</span>
-                            </div>
-                            <p class="text-sm text-center text-gray-500">CLP · Incluye envío gratis</p>
-                        </div>
-                        <ul class="mb-6 space-y-2">
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span><strong>5 Temporizadores FocusCube</strong></span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>5 Cables USB de carga</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>Guía digital de Productividad PDF</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>Taller online de Productividad</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>Garantía extendida de 2 años</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>Soporte prioritario</span>
-                            </li>
-                        </ul>
-                        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-300">
-                            Comprar Ahora
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mt-12 bg-gray-50 p-6 rounded-xl">
-                <h3 class="text-xl font-semibold mb-4 text-center">Detalles de la compra</h3>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
-                    <div>
-                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-truck text-blue-600"></i>
-                        </div>
-                        <h4 class="font-medium">Envío Gratis</h4>
-                        <p class="text-sm text-gray-600">A todo Chile en 24-48h</p>
-                    </div>
-                    <div>
-                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-credit-card text-green-600"></i>
-                        </div>
-                        <h4 class="font-medium">Pago Seguro</h4>
-                        <p class="text-sm text-gray-600">Webpay, transferencia o efectivo</p>
-                    </div>
-                    <div>
-                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-exchange-alt text-purple-600"></i>
-                        </div>
-                        <h4 class="font-medium">Garantía</h4>
-                        <p class="text-sm text-gray-600">30 días de devolución</p>
-                    </div>
-                    <div>
-                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-headset text-yellow-600"></i>
-                        </div>
-                        <h4 class="font-medium">Soporte</h4>
-                        <p class="text-sm text-gray-600">Atención al cliente 24/7</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonios -->
-    <section id="testimonios" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Lo Que Dicen Nuestros Clientes</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Más de 2,500 personas en Chile ya han mejorado su productividad con FocusCube.
-                </p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-xl shadow-custom">
-                    <div class="flex items-center mb-4">
-                        <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/32_002.jpg" alt="Testimonio de Claudia" class="w-12 h-12 rounded-full mr-4">
-                        <div>
-                            <h4 class="font-semibold">Claudia Rojas</h4>
-                            <p class="text-sm text-gray-600">Estudiante de Ingeniería, Santiago</p>
-                        </div>
-                    </div>
-                    <div class="mb-4 text-yellow-400">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p class="text-gray-600">
-                        "Como estudiante de ingeniería, tengo que 
-concentrarme por horas en problemas complejos. El FocusCube ha cambiado 
-mi forma de estudiar. Ahora descanso en los momentos correctos y mi 
-concentración ha mejorado enormemente."
-                    </p>
-                </div>
-                
-                <div class="bg-white p-8 rounded-xl shadow-custom">
-                    <div class="flex items-center mb-4">
-                        <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/45.jpg" alt="Testimonio de Rodrigo" class="w-12 h-12 rounded-full mr-4">
-                        <div>
-                            <h4 class="font-semibold">Rodrigo Vega</h4>
-                            <p class="text-sm text-gray-600">Diseñador Freelance, Viña del Mar</p>
-                        </div>
-                    </div>
-                    <div class="mb-4 text-yellow-400">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                    </div>
-                    <p class="text-gray-600">
-                        "Como freelancer, a veces me cuesta dividir mi 
-tiempo entre proyectos. Compré el pack duo y ahora mi pareja y yo 
-trabajamos más eficientemente desde casa. La función de sensor de 
-gravedad es genial, simplemente giras y comienza la cuenta regresiva."
-                    </p>
-                </div>
-                
-                <div class="bg-white p-8 rounded-xl shadow-custom">
-                    <div class="flex items-center mb-4">
-                        <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/67.jpg" alt="Testimonio de Marcela" class="w-12 h-12 rounded-full mr-4">
-                        <div>
-                            <h4 class="font-semibold">Marcela Durán</h4>
-                            <p class="text-sm text-gray-600">Gerente de Marketing, Concepción</p>
-                        </div>
-                    </div>
-                    <div class="mb-4 text-yellow-400">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p class="text-gray-600">
-                        "Adquirí el Pack Oficina para mi equipo y ha 
-sido una inversión increíble. Las reuniones son más eficientes, el 
-trabajo más enfocado y todos apreciamos los descansos programados. Ha 
-aumentado nuestra productividad en un 30%."
-                    </p>
-                </div>
-            </div>
-            
-            <div class="mt-12 p-8 bg-white rounded-xl shadow-custom">
-                <div class="flex flex-col md:flex-row items-center">
-                    <div class="md:w-1/2 mb-6 md:mb-0">
-                        <h3 class="text-2xl font-semibold mb-4">La comunidad FocusCube sigue creciendo</h3>
-                        <div class="mb-6">
-                            <div class="flex items-center mb-2">
-                                <div class="w-full bg-gray-200 h-3 rounded-full">
-                                    <div class="bg-green-500 h-3 rounded-full" style="width: 92%"></div>
-                                </div>
-                                <span class="ml-4 font-medium">92%</span>
-                            </div>
-                            <p class="text-sm text-gray-600">Clientes satisfechos</p>
-                        </div>
-                        <div class="mb-6">
-                            <div class="flex items-center mb-2">
-                                <div class="w-full bg-gray-200 h-3 rounded-full">
-                                    <div class="bg-blue-500 h-3 rounded-full" style="width: 87%"></div>
-                                </div>
-                                <span class="ml-4 font-medium">87%</span>
-                            </div>
-                            <p class="text-sm text-gray-600">Reportan mejora en productividad</p>
-                        </div>
-                        <div>
-                            <div class="flex items-center mb-2">
-                                <div class="w-full bg-gray-200 h-3 rounded-full">
-                                    <div class="bg-purple-500 h-3 rounded-full" style="width: 96%"></div>
-                                </div>
-                                <span class="ml-4 font-medium">96%</span>
-                            </div>
-                            <p class="text-sm text-gray-600">Recomendarían a un amigo</p>
-                        </div>
-                    </div>
-                    <div class="md:w-1/2 md:pl-12 flex justify-center">
-                        <div class="grid grid-cols-3 gap-4">
-                            <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/44.jpg" alt="Usuario FocusCube" class="rounded-lg w-20 h-20 object-cover">
-                            <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/32.jpg" alt="Usuario FocusCube" class="rounded-lg w-20 h-20 object-cover">
-                            <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/68.jpg" alt="Usuario FocusCube" class="rounded-lg w-20 h-20 object-cover">
-                            <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/36.jpg" alt="Usuario FocusCube" class="rounded-lg w-20 h-20 object-cover">
-                            <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/65.jpg" alt="Usuario FocusCube" class="rounded-lg w-20 h-20 object-cover">
-                            <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/86.jpg" alt="Usuario FocusCube" class="rounded-lg w-20 h-20 object-cover">
-                            <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/54.jpg" alt="Usuario FocusCube" class="rounded-lg w-20 h-20 object-cover">
-                            <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/12.jpg" alt="Usuario FocusCube" class="rounded-lg w-20 h-20 object-cover">
-                            <div class="rounded-lg w-20 h-20 bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
-                                +2500
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Preguntas Frecuentes -->
-    <section id="faq" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Preguntas Frecuentes</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Todo lo que necesitas saber sobre FocusCube y el método Pomodoro.
-                </p>
-            </div>
-            
-            <div class="max-w-3xl mx-auto">
-                <div class="mb-6 border-b border-gray-200 pb-6">
-                    <h3 class="text-xl font-semibold mb-2">¿Qué es el método Pomodoro?</h3>
-                    <p class="text-gray-600">
-                        El método Pomodoro es una técnica de gestión del
- tiempo desarrollada por Francesco Cirillo en los años 80. Consiste en 
-dividir el trabajo en intervalos de 25 minutos (llamados "pomodoros") 
-separados por descansos cortos de 5 minutos. Después de completar 4 
-pomodoros, se toma un descanso más largo de 15-30 minutos.
-                    </p>
-                </div>
-                
-                <div class="mb-6 border-b border-gray-200 pb-6">
-                    <h3 class="text-xl font-semibold mb-2">¿Cómo funciona el sensor de gravedad?</h3>
-                    <p class="text-gray-600">
-                        El sensor de gravedad permite iniciar el 
-temporizador simplemente girando el cubo. Cada cara del cubo está 
-preconfigurada para un tiempo específico (5, 10, 30 o 60 minutos). Al 
-girar el cubo con la cara deseada hacia arriba, el temporizador se 
-inicia automáticamente sin necesidad de presionar botones.
-                    </p>
-                </div>
-                
-                <div class="mb-6 border-b border-gray-200 pb-6">
-                    <h3 class="text-xl font-semibold mb-2">¿Puedo personalizar los tiempos del temporizador?</h3>
-                    <p class="text-gray-600">
-                        Sí, además de los tiempos predeterminados 
-activados por el sensor de gravedad, puedes configurar tiempos 
-personalizados de 1 a 99 minutos utilizando los botones en la parte 
-posterior del temporizador. Estos ajustes se guardan incluso cuando el 
-dispositivo está apagado.
-                    </p>
-                </div>
-                
-                <div class="mb-6 border-b border-gray-200 pb-6">
-                    <h3 class="text-xl font-semibold mb-2">¿Cuánto dura la batería?</h3>
-                    <p class="text-gray-600">
-                        La batería del FocusCube puede durar entre 6 y 8
- meses con un uso normal antes de necesitar recargarse. El tiempo de 
-carga completa es de aproximadamente 2 horas mediante el cable USB-C 
-incluido. El dispositivo también cuenta con un indicador de batería 
-baja.
-                    </p>
-                </div>
-                
-                <div class="mb-6 border-b border-gray-200 pb-6">
-                    <h3 class="text-xl font-semibold mb-2">¿Cuánto tarda el envío?</h3>
-                    <p class="text-gray-600">
-                        Realizamos envíos a todo Chile con un tiempo de 
-entrega de 24-48 horas hábiles para Santiago y 2-5 días hábiles para 
-regiones. Todos los envíos incluyen seguimiento en línea y 
-notificaciones por correo electrónico.
-                    </p>
-                </div>
-                
-                <div class="mb-6 border-b border-gray-200 pb-6">
-                    <h3 class="text-xl font-semibold mb-2">¿Tiene garantía?</h3>
-                    <p class="text-gray-600">
-                        Todos nuestros productos cuentan con 1 año de 
-garantía por defectos de fabricación. Los packs Duo y Oficina incluyen 
-garantía extendida de 2 años. Además, ofrecemos 30 días de prueba con 
-devolución sin preguntas si no estás satisfecho con el producto.
-                    </p>
-                </div>
-                
-                <div>
-                    <h3 class="text-xl font-semibold mb-2">¿Puedo usarlo para otras actividades además del trabajo/estudio?</h3>
-                    <p class="text-gray-600">
-                        Absolutamente. Aunque fue diseñado 
-principalmente para el método Pomodoro, el FocusCube es versátil y puede
- utilizarse para cualquier actividad que requiera control del tiempo: 
-cocinar, hacer ejercicio, controlar el tiempo de uso de dispositivos 
-para niños, meditación, y más.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA y Formulario de Contacto -->
-    <section class="py-20 gradient-bg text-white">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row">
-                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-12">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6">¿Listo para transformar tu productividad?</h2>
-                    <p class="text-lg mb-8 opacity-90">
-                        Únete a los miles de chilenos que ya están 
-maximizando su tiempo y alcanzando sus objetivos con FocusCube.
-                    </p>
-                    <div class="mb-8">
-                        <div class="flex items-center mb-4">
-                            <div class="bg-white bg-opacity-20 rounded-full p-2 mr-4">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <span>Envío gratuito a todo Chile</span>
-                        </div>
-                        <div class="flex items-center mb-4">
-                            <div class="bg-white bg-opacity-20 rounded-full p-2 mr-4">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <span>Garantía de satisfacción de 30 días</span>
-                        </div>
-                        <div class="flex items-center mb-4">
-                            <div class="bg-white bg-opacity-20 rounded-full p-2 mr-4">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <span>Soporte personalizado</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="bg-white bg-opacity-20 rounded-full p-2 mr-4">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <span>Pago seguro en cuotas sin interés</span>
-                        </div>
-                    </div>
-                    <div class="bg-white bg-opacity-10 p-6 rounded-lg">
-                        <div class="flex items-center mb-4">
-                            <img src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/23.jpg" alt="Javiera Gómez" class="w-12 h-12 rounded-full mr-4">
-                            <div>
-                                <h4 class="font-semibold">Javiera Gómez</h4>
-                                <p class="text-sm opacity-80">Directora de Marketing</p>
-                            </div>
-                        </div>
-                        <p class="italic">
-                            "FocusCube ha sido una revolución en nuestra
- oficina. La productividad ha aumentado significativamente y las 
-reuniones son mucho más eficientes. ¡Totalmente recomendado!"
-                        </p>
-                    </div>
-                </div>
-                <div class="md:w-1/2">
-                    <div class="bg-white rounded-xl p-8 shadow-custom">
-                        <h3 class="text-gray-800 text-xl font-semibold mb-6">¿Tienes dudas? Contáctanos</h3>
-                        <form>
-                            <div class="mb-4">
-                                <label for="name" class="block text-gray-700 mb-2">Nombre</label>
-                                <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tu nombre">
-                            </div>
-                            <div class="mb-4">
-                                <label for="email" class="block text-gray-700 mb-2">Email</label>
-                                <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="tu@email.com">
-                            </div>
-                            <div class="mb-4">
-                                <label for="subject" class="block text-gray-700 mb-2">Asunto</label>
-                                <select id="subject" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="" selected="selected">Selecciona un asunto</option>
-                                    <option value="compra">Información de compra</option>
-                                    <option value="producto">Detalles del producto</option>
-                                    <option value="envio">Estado de envío</option>
-                                    <option value="otro">Otro</option>
-                                </select>
-                            </div>
-                            <div class="mb-6">
-                                <label for="message" class="block text-gray-700 mb-2">Mensaje</label>
-                                <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tu mensaje aquí..."></textarea>
-                            </div>
-                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-300">
-                                Enviar Mensaje
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="py-12 bg-gray-900 text-white">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-                <div>
-                    <h3 class="text-xl font-bold mb-4">FocusCube</h3>
-                    <p class="text-gray-400 mb-6">
-                        Ayudando a las personas a maximizar su productividad con soluciones innovadoras.
-                    </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
-                            <i class="fab fa-youtube"></i>
-                        </a>
-                    </div>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Productos</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">FocusCube Individual</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Duo Pack</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Pack Oficina</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Accesorios</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Soporte</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Centro de Ayuda</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Envíos</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Devoluciones</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Garantía</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Contacto</h4>
-                    <ul class="space-y-2">
-                        <li class="flex items-start">
-                            <i class="fas fa-map-marker-alt mt-1 mr-2 text-gray-400"></i>
-                            <span class="text-gray-400">Av. Providencia 1234, Santiago, Chile</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-phone mt-1 mr-2 text-gray-400"></i>
-                            <span class="text-gray-400">+56 2 2123 4567</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-envelope mt-1 mr-2 text-gray-400"></i>
-                            <span class="text-gray-400">contacto@focuscube.cl</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
-                <p>© 2025 FocusCube Chile. Todos los derechos reservados.</p>
-                <div class="mt-2 space-x-4">
-                    <a href="#" class="hover:text-white transition duration-300">Política de Privacidad</a>
-                    <a href="#" class="hover:text-white transition duration-300">Términos y Condiciones</a>
-                    <a href="#" class="hover:text-white transition duration-300">Política de Cookies</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Back to top button -->
-    <button id="backToTop" class="fixed bottom-8 right-8 bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 opacity-100 visible">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-
-    <!-- Script -->
-    <script>
-        // Back to top button functionality
-        const backToTopButton = document.getElementById('backToTop');
-        
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                backToTopButton.classList.remove('opacity-0', 'invisible');
-                backToTopButton.classList.add('opacity-100', 'visible');
-            } else {
-                backToTopButton.classList.remove('opacity-100', 'visible');
-                backToTopButton.classList.add('opacity-0', 'invisible');
-            }
-        });
-        
-        backToTopButton.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-        
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-    </script>
-
-
-    <script id="html_badge_script1">
-        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
-            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDgv9AFCdogV%2FbL7sjYzVgNAJxZZkx6oyol39Pbp6FyEAUwH3APrY3%2FJPuMv77hTho193fKdTn6grPqc7O1UzUIOiuAgVVFTl%2F8pyqv%2Bzza34hJ7swH0sb8VcEqQYJgFVDeqy7DOX9Xxink04LTLiRcSLYEgvBzs1s9EoGeDYWzAZugi%2BbFiYRHnmwkiLA%2BhKmJhBY6NSlXDi1wQtCOxatKh4o5YxgZe56TXo0pCpatPJO%2ByWunI8wkH2i%2FS3ZBA7CqCDeNAfw2UHGRPGNeeAmXmNT1TGciPyJJU7%2F1FAiNqgBzFEhYey94%2F%2BLxnkSNRKjNVorWoTzHGRBwvKT6gDEkFx1SrExSSc9e%2FoWXu8bWus%2F07wqyap%2BaUbUoYFctZXHlUSzut37iEU1ev8SMMDDzHGLnFh59SCm5QQJGXaTBHmRORrFaeZVo0E1Zi%2FM7N4Cl8RD88QJnhzmJwXjVnzTVCKG5BszqTXP4scJVNs%2FtO%2BK9yCJMJzkOYXw4it9jQI4OJ2NR5kYlvVKfDNXvJBFhk%3D";
-        window.__genspark_locale = "en-US";
-        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDgv9AFCdogV/bL7sjYzVgNAJxZZkx6oyol39Pbp6FyEAUwH3APrY3/JPuMv77hTho193fKdTn6grPqc7O1UzUIOiuAgVVFTl/8pyqv+zza34hJ7swH0sb8VcEqQYJgFVDeqy7DOX9Xxink04LTLiRcSLYEgvBzs1s9EoGeDYWzAZugi+bFiYRHnmwkiLA+hKmJhBY6NSlXDi1wQtCOxatKh4o5YxgZe56TXo0pCpatPJO+yWunI8wkH2i/S3ZBA7CqCDeNAfw2UHGRPGNeeAmXmNT1TGciPyJJU7/1FAiNqgBzFEhYey94/+LxnkSNRKjNVorWoTzHGRBwvKT6gDEkFx1SrExSSc9e/oWXu8bWus/07wqyap+aUbUoYFctZXHlUSzut37iEU1ev8SMMDDzHGLnFh59SCm5QQJGXaTBHmRORrFaeZVo0E1Zi/M7N4Cl8RD88QJnhzmJwXjVnzTVCKG5BszqTXP4scJVNs/tO+K9yCJMJzkOYXw4it9jQI4OJ2NR5kYlvVKfDNXvJBFhk=";
-    </script>
-    
-        <script id="html_badge_script2" src="FocusCube%20-%20El%20Temporizador%20Pomodoro%20que%20Transformar%C3%A1%20tu%20Productividad_files/html_badge.js"></script><button class="genspark-badge-button"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-<path d="M11.3412 0H2.65879C1.19038 0 0 1.19038 0 2.65879V11.3412C0 12.8096 1.19038 14 2.65879 14H11.3412C12.8096 14 14 12.8096 14 11.3412V2.65879C14 1.19038 12.8096 0 11.3412 0Z" fill="white"></path>
-<path d="M11.7403 10.7031H2.29243C2.09641 10.7031 1.9375 10.862 1.9375 11.0581V11.8033C1.9375 11.9993 2.09641 12.1582 2.29243 12.1582H11.7403C11.9363 12.1582 12.0952 11.9993 12.0952 11.8033V11.0581C12.0952 10.862 11.9363 10.7031 11.7403 10.7031Z" fill="#232425"></path>
-<path d="M5.09178 9.18166C5.03494 9.18166 4.98695 9.13998 4.97811 9.08314C4.60803 6.63655 4.34025 6.42056 1.91134 6.05427C1.83682 6.0429 1.78125 5.97848 1.78125 5.9027C1.78125 5.82691 1.83682 5.7625 1.91134 5.75113C4.32762 5.3861 4.54235 5.17011 4.90738 2.7551C4.91874 2.68058 4.98316 2.625 5.05894 2.625C5.13473 2.625 5.19914 2.68058 5.21051 2.7551C5.57554 5.17011 5.79153 5.3861 8.20655 5.75113C8.28107 5.7625 8.33664 5.82691 8.33664 5.9027C8.33664 5.97848 8.28107 6.0429 8.20655 6.05427C5.78017 6.42056 5.57302 6.63655 5.20546 9.08314C5.19662 9.13871 5.14862 9.18166 5.09178 9.18166Z" fill="#232425"></path>
-<path d="M9.70174 5.949C9.66637 5.949 9.63606 5.92248 9.63101 5.88711C9.39986 4.35878 9.23188 4.22363 7.71492 3.99501C7.66818 3.98743 7.63281 3.94828 7.63281 3.90028C7.63281 3.85355 7.66692 3.81313 7.71492 3.80555C9.2243 3.5782 9.35945 3.44305 9.5868 1.93366C9.59438 1.88693 9.63354 1.85156 9.68153 1.85156C9.72827 1.85156 9.76869 1.88567 9.77627 1.93366C10.0036 3.44305 10.1388 3.5782 11.6482 3.80555C11.6949 3.81313 11.7302 3.85228 11.7302 3.90028C11.7302 3.94702 11.6962 3.98743 11.6482 3.99501C10.1325 4.22363 10.0024 4.35878 9.77247 5.88711C9.76742 5.92248 9.73711 5.949 9.70174 5.949Z" fill="#232425"></path>
-<path d="M9.69114 9.76325C9.6684 9.76325 9.64946 9.74683 9.64567 9.7241C9.49915 8.75152 9.39179 8.66563 8.42679 8.52038C8.39648 8.51533 8.375 8.49007 8.375 8.45975C8.375 8.42944 8.39648 8.40418 8.42679 8.39912C9.38673 8.25387 9.47262 8.16798 9.61788 7.20804C9.62293 7.17772 9.64819 7.15625 9.6785 7.15625C9.70882 7.15625 9.73408 7.17772 9.73913 7.20804C9.88439 8.16798 9.97028 8.25387 10.9302 8.39912C10.9605 8.40418 10.982 8.42944 10.982 8.45975C10.982 8.49007 10.9605 8.51533 10.9302 8.52038C9.96523 8.66563 9.88312 8.75152 9.73661 9.7241C9.73282 9.74683 9.71387 9.76325 9.69114 9.76325Z" fill="#232425"></path>
-</svg> Made with Genspark</button><div class="genspark-modal">
-    <div class="genspark-modal-content">
-      <button class="genspark-close"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-<path d="M11 3L3 11M3 3L11 11" stroke="#232425" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg></button>
-      <h3 class="genspark-title">This page was created by users with AI.</h3>
-      <a class="genspark-report" href="mailto:support@genspark.ai?subject=Report%20inappropriate%20content&amp;body=Current%20URL:%20https://ooxrohmv.genspark.space/">Report inappropriate content.</a>
-      <p class="genspark-info">Page owner with Plus Plan can remove badge.</p>
-      <div class="genspark-buttons">
-        <button class="genspark-remove-btn">Remove Badge</button>
-        <button class="genspark-go-btn">Go to Genspark</button>
+  <nav>
+    <div class="nav-container">
+      <a href="#hero" class="logo"><strong>FocusCube</strong></a>
+      <div class="nav-links">
+        <a href="#features">Características</a>
+        <a href="#benefits">Beneficios</a>
+        <a href="#pricing">Comprar</a>
+        <a href="#testimonials">Testimonios</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contacto</a>
       </div>
     </div>
-  </div>
-        </body></html>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="container grid" style="grid-template-columns:1fr 1fr; align-items:center;">
+      <div class="content">
+        <h1>Domina tu tiempo con el Temporizador Pomodoro más inteligente</h1>
+        <p>FocusCube combina sensor de gravedad y diseño minimalista para convertirte en la persona más productiva.</p>
+        <div class="stats">
+          <div class="stat-item"><strong>4.9/5</strong><br>132 reseñas</div>
+          <div class="stat-item">Envío Gratis</div>
+        </div>
+        <a href="#pricing" class="btn">Comprar Ahora</a>
+      </div>
+      <div class="image">
+        <img src="https://via.placeholder.com/400x400" alt="FocusCube Temporizador" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Características -->
+  <section id="features" class="container">
+    <h2>Características Revolucionarias</h2>
+    <div class="grid features-grid">
+      <div class="glass-card"><h3>Sensor de Gravedad</h3><p>Gira el cubo para iniciar intervalos de 5, 10, 30 o 60 minutos sin botones.</p></div>
+      <div class="glass-card"><h3>Batería Recargable</h3><p>Hasta 8 meses de uso con una sola carga.</p></div>
+      <div class="glass-card"><h3>Alarma Silenciosa</h3><p>Vibración o sonido ajustable, ideal para espacios silenciosos.</p></div>
+      <div class="glass-card"><h3>Diseño Minimalista</h3><p>Compacto y elegante, mejora la estética de tu escritorio.</p></div>
+      <div class="glass-card"><h3>Personalizable</h3><p>Tiempos personalizados de 1 a 99 minutos con botones traseros.</p></div>
+      <div class="glass-card"><h3>Pantalla LED Clara</h3><p>Alta visibilidad incluso a distancia.</p></div>
+    </div>
+  </section>
+
+  <!-- Beneficios -->
+  <section id="benefits" class="container">
+    <h2>Transforma Tu Productividad</h2>
+    <div class="grid benefits-grid">
+      <div class="glass-card"><h3>Mayor Concentración</h3><p>Reduce distracciones y entra en flujo rápidamente.</p></div>
+      <div class="glass-card"><h3>Productividad Mejorada</h3><p>Completa más tareas en menos tiempo.</p></div>
+      <div class="glass-card"><h3>Reducción del Estrés</h3><p>Descansos planificados para evitar agotamiento.</p></div>
+      <div class="glass-card"><h3>Mejor Descanso</h3><p>Interrupciones óptimas para prevenir burnout.</p></div>
+      <div class="glass-card"><h3>Gestión del Tiempo</h3><p>Optimiza tus estimaciones y tareas diarias.</p></div>
+      <div class="glass-card"><h3>Hábitos Sostenibles</h3><p>Rutinas consistentes para eficacia a largo plazo.</p></div>
+    </div>
+    <div class="stats">
+      <div class="stat-item"><strong>+70%</strong><br>Enfoque</div>
+      <div class="stat-item"><strong>+37%</strong><br>Productividad</div>
+      <div class="stat-item"><strong>-31%</strong><br>Estrés</div>
+    </div>
+  </section>
+
+  <!-- Planes -->
+  <section id="pricing" class="container">
+    <h2>Elige Tu Plan de Productividad</h2>
+    <div class="pricing">
+      <div class="plan-card"><h3>Personal</h3><div class="price">$24.990 CLP</div><ul><li>1 FocusCube</li><li>Cable USB</li><li>Guía PDF</li></ul><a href="#" class="btn">Comprar Ahora</a></div>
+      <div class="plan-card"><h3>Duo Pack</h3><div class="price">$39.990 CLP</div><ul><li>2 FocusCubes</li><li>2 Cables USB</li><li>Guía PDF + Planner</li></ul><a href="#" class="btn">Comprar Ahora</a></div>
+      <div class="plan-card"><h3>Pack Oficina</h3><div class="price">$89.990 CLP</div><ul><li>5 FocusCubes</li><li>5 Cables USB</li><li>Workshop Online</li><li>Soporte Prioritario</li></ul><a href="#" class="btn">Comprar Ahora</a></div>
+    </div>
+    <div class="glass-card" style="margin-top:2rem;"><h4>Detalles de Compra</h4><p>Envío gratis a todo Chile en 24-48h. Pago seguro (Webpay, transferencia).</p><p>Garantía: 30 días devolución, 1-2 años según pack. Soporte 24/7.</p></div>
+  </section>
+
+  <!-- Testimonios -->
+  <section id="testimonials" class="container">
+    <h2>Lo Que Dicen Nuestros Clientes</h2>
+    <div class="testimonials">
+      <div class="testimonial"><p>"El FocusCube ha cambiado mi forma de estudiar. Mi concentración ha mejorado enormemente."</p><strong>— Claudia Rojas, Santiago</strong></div>
+      <div class="testimonial"><p>"Compré el duo pack y ahora trabajamos más eficientemente. El sensor de gravedad es genial."</p><strong>— Rodrigo Vega, Viña del Mar</strong></div>
+      <div class="testimonial"><p>"Las reuniones son más eficientes y hemos visto un aumento del 30% en productividad."</p><strong>— Marcela Durán, Concepción</strong></div>
+    </div>
+    <div class="community">
+      <h3>La comunidad FocusCube sigue creciendo</h3>
+      <div class="community-stats">
+        <div><strong>92%</strong><br>Clientes satisfechos</div>
+        <div><strong>87%</strong><br>Mejora productividad</div>
+        <div><strong>96%</strong><br>Recomiendan</div>
+      </div>
+      <p>+2500 usuarios</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="container">
+    <h2>Preguntas Frecuentes</h2>
+    <div class="faq-item"><h3>¿Qué es el método Pomodoro?</h3><p>Técnica de intervalos de 25 min con descansos cortos, creada en los 80.</p></div>
+    <div class="faq-item"><h3>¿Cómo funciona el sensor de gravedad?</h3><p>Gira el cubo para iniciar el temporizador según la cara elegida.</p></div>
+    <div class="faq-item"><h3>¿Puedo personalizar los tiempos?</h3><p>Sí, ajusta de 1 a 99 min con botones traseros.</p></div>
+    <div class="faq-item"><h3>¿Cuánto dura la batería?</h3><p>6-8 meses de uso normal. Carga en ~2 horas por USB-C.</p></div>
+    <div class="faq-item"><h3>¿Cuánto tarda el envío?</h3><p>24-48 h en Santiago, 2-5 días en regiones.</p></div>
+    <div class="faq-item"><h3>¿Tiene garantía?</h3><p>1 año estándar, 2 años en packs Duo/Oficina. 30 días devolución.</p></div>
+    <div class="faq-item"><h3>¿Para qué más sirve?</h3><p>Cocina, ejercicio, rutinas, meditación y más.</p></div>
+  </section>
+
+  <!-- Contacto -->
+  <section id="contact" class="container">
+    <h2>¿Tienes dudas? Contáctanos</h2>
+    <form>
+      <div class="form-group"><label>Nombre</label><input type="text" placeholder="Tu nombre"></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="Tu email"></div>
+      <div class="form-group"><label>Asunto</label><select><option>Información de compra</option><option>Detalles del producto</option><option>Estado de envío</option><option>Otro</option></select></div>
+      <div class="form-group"><label>Mensaje</label><textarea rows="4" placeholder="Escribe tu mensaje"></textarea></div>
+      <button type="submit" class="btn">Enviar Mensaje</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <div><h4>Productos</h4><p>Individual · Duo Pack · Pack Oficina · Accesorios</p></div>
+      <div><h4>Soporte</h4><p>Centro de Ayuda · Envíos · Devoluciones · Garantía</p></div>
+      <div><h4>Contacto</h4><p>Av. Providencia 1234, Santiago<br>+56 2 2123 4567<br>contacto@focuscube.cl</p></div>
+    </div>
+    <p>© 2025 FocusCube Chile. Todos los derechos reservados.</p>
+    <p><a href="#">Política de Privacidad</a> · <a href="#">Términos y Condiciones</a></p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>
